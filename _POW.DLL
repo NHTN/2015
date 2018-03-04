@@ -1,0 +1,23 @@
+long long power(int u, int x, long long base) // u ^ x mod base
+{
+    long long t = u, r = 1;
+    while (x)
+    {
+        if (x & 1) r = (r * t) % base;
+        t = (t * t) % base;
+        x >>= 1;
+    }
+    return r;
+}
+long long power1(int x, long long base) // x so 1 mod base
+{
+    long long ty = 10, tx = 1, tr = (x & 1); x >>= 1;
+    while (x)
+    {
+        tx = (tx * ty + tx) % base;
+        ty = (ty * ty) % base;
+        if (x & 1) tr = (tr * ty + tx) % base;
+        x >>= 1;
+    }
+    return tr;
+}

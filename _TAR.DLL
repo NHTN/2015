@@ -1,0 +1,60 @@
+#include <bits/stdc++.h>
+#define maxn 1000001
+ 
+using namespace std;
+ 
+vector <int> a[maxn];
+stack <int> p;
+int low[maxn], num[maxn], tplt, dem, n, m;
+bool dd[maxn];
+ 
+void dfs(int u)
+{
+    low[u] = num[u] = ++dem;
+    p.push(u);
+    for (int i = 0; i < a[u].size(); i++)
+    {
+        int v = a[u][i];
+        if (dd[v] == true)
+            if (num[v] == 0)
+            {
+                dfs(v);
+                if (low[u] > low[v]) low[u] =low[v];
+            }
+            else if (low[u] > num[v]) low[u] = num[v];
+    }
+    if (low[u] == num[u])
+    {
+        int  v;
+        ++tplt;
+        do
+        {
+            v = p.top();
+            p.pop();
+            dd[v] = false;
+        }
+        while (v != u);
+    }
+ 
+}
+ 
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++)
+    {
+        int u, v;
+        cin >> u >> v;
+        a[u].push_back(v);
+    }
+    memset(dd, true, sizeof(dd));
+    memset(num, 0, sizeof(num));
+    memset(low, 0, sizeof(low));
+    dem = 0;
+    tplt = 0;
+    for (int j = 1; j <= n; j++)
+        if (num[j] == 0) dfs(j);
+    cout << tplt;
+    return 0;
+}

@@ -1,0 +1,45 @@
+#include <bits/stdc++.h>
+#define maxn 1000001
+using namespace std;
+int n;
+vector < pair<int, long long > > a[maxn];
+long long d[maxn];
+int vt = 0, p[maxn];
+long long res;
+void dfs(int u, int par)
+{
+    p[u] = par;
+    for (int i = 0; i < a[u].size(); i++)
+    {
+        int v = a[u][i].first;
+        if (v == par) continue;
+        d[v] = d[u] + a[u][i].second;
+        dfs(v,u);
+    }
+}
+int main()
+{
+    freopen("CENTER_NODE.INP", "r", stdin);
+    freopen("CENTER_NODE.OUT", "w", stdout);
+    cin >> n;
+    for (int i = 1; i < n; i++)
+    {
+        int x, y, w;
+        cin >> x >> y >> w;
+        a[x].push_back(make_pair(y, w));
+        a[y].push_back(make_pair(x, w));
+    }
+    memset(d, 0, sizeof(d));
+    dfs(1,0);
+    vt = max_element(d+1, d+n+1) - d;
+    memset(d, 0, sizeof(d));
+    dfs(vt,0);
+    vt = max_element(d+1, d+n+1) - d;
+    long long tam = res = d[vt];
+    while (vt)
+    {
+        res = min(res, max(tam - d[vt], d[vt]));
+        vt = p[vt];
+    }
+    cout << res;
+}

@@ -1,0 +1,142 @@
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <queue>
+#include <vector>
+#include <cstring>
+#include <cmath>
+#include <set>
+
+#define file ""
+#define fi freopen(file".INP", "r", stdin);
+#define fo freopen(file".OUT", "w", stdout);
+#define IB ios_base::sync_with_stdio(0);
+#define pb push_back
+#define f first
+#define s second
+#define maxn 100005
+#define base 1000000007
+using namespace std;
+struct data
+{
+    int x, y;
+    data(){}
+    data(int _x = 0, int _y = 0)
+    {
+        x = _x;
+        y = _y;
+    }
+    bool operator < (const data &p) const
+    {
+        return x < p.x || (x == p.x && y < p.y);
+    }
+};
+struct tree
+{
+    int x;
+    tree *con[26];
+    tree()
+    {
+        x = 0;
+        for (int i = 0; i < 26; i++) con[i] = NULL;
+    }
+};
+tree T;
+
+
+
+/*
+struct tree
+{
+    int e;
+    tree *con[256];
+    tree()
+    {
+        e = 0;
+        for (int ii = 0; ii < 256; ii++) con[ii] = NULL;
+    }
+};
+tree T;
+int n;
+string a[maxn];
+void PUSH(string s)
+{
+    tree *p = &T;
+    for (int j = 0; j < s.length(); j++)
+    {
+        int b = s[j];
+        if (p->con[b] == NULL) p->con[b] = new tree();
+        p = p->con[b];
+    }
+    p->e++;
+}
+int answer(string s)
+{
+    tree *p = &T;
+    for (int j = 0; j < s.length(); j++)
+    {
+        int b = s[j];
+        p = p->con[b];
+    }
+    return p->e;
+}
+
+*/
+
+int main()
+{
+    IB;
+    //fi; fo;
+    /*cout << "HEAP\n"
+    priority_queue <data> p;
+    set <data> S;
+    set <data> :: iterator it;
+    p.push(data(1, 2));
+    p.push(data(3, 2));
+    p.push(data(2, 1));
+    p.push(data(3, 5));
+    cout << p.top().x << " " << p.top().y << endl;
+    cout << "SET\n";
+
+    S.insert(data(1, 2));
+    S.insert(data(5, 4));
+    S.insert(data(5, 4));
+    S.insert(data(1, 2));
+    S.insert(data(1, 2));
+    S.insert(data(2, 3));
+    for (it = S.begin(); it != S.end(); it++)
+     cout << (*it).x << " " << (*it).y << endl;
+        */
+    cout << "TRIE\n";
+    string s1, s2, s3;
+    cin >> s1 >> s2 >> s3;
+    tree *p = &T;
+    for (int i = 0; i < s1.length(); i++)
+    {
+        int b = s1[i] - 'a';
+        if (p->con[b] == NULL) p->con[b] = new tree();
+        p = p->con[b];
+    }
+    p->x = 1;
+    p = &T;
+    for (int i = 0; i < s2.length(); i++)
+    {
+        int b = s2[i] - 'a';
+        if (p->con[b] == NULL) p->con[b] = new tree();
+        p = p->con[b];
+    }
+    p->x = 2;
+    p = &T;
+    for (int i = 0; i < s3.length(); i++)
+    {
+        int b = s3[i] - 'a';
+        if (p->con[b] == NULL)
+        {
+            cout << 0;
+            return 0;
+        }
+        p = p->con[b];
+    }
+    cout << p->x;
+    return 0;
+}

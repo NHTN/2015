@@ -1,0 +1,70 @@
+#include <bits/stdc++.h>
+#define maxn 100005
+using namespace std;
+int n, goc, q, h[maxn], par[maxn][18];
+vector <int> a[maxn];
+void input()
+{
+    cin >> n >> goc >> q;
+    for (int i = 1; i < n; i++)
+    {
+        int u, v;
+        cin >> u >> v;
+        a[u].push_back(v);
+        a[v].push_back(u);
+    }
+}
+void dfs(int u)
+{
+    for (int i = 0; i < a[u].size(); i++)
+    {
+        int v = a[u][i];
+        if (par[u][0] == v) continue;
+        par[v][0] = u;
+        h[v] = h[u] + 1;
+        dfs(v);
+    }
+}
+void rmq()
+{
+    for (int i = 1; i <= 17; i++)
+        for (int j = 1; j <= n; j++)
+            par[j][i] = par[par[j][i-1]][i-1];
+}
+int lca(int u, int v)
+{
+    if (h[u] > h[v]) swap(u, v);
+    int x = h[v] - h[u];
+    for (int i = 17; i >= 0; i--)
+        if ((x >> i) & 1) v = par[v][i];
+    if (u == v) return v;
+    for (int i = 17; i >= 0; i--)
+        if (par[u][i] != par[v][i])
+        {
+            u = par[u][i];
+            v = par[v][i];
+        }
+    return par[v][0];
+}
+void output()
+{
+    for (int i = 0; i < q; i++)
+    {
+        int u, v;
+        cin >> u >> v;
+        cout << lca(u, v) << endl;
+    }
+}
+int main()
+{
+    ios_base::sync_with_stdio();
+    freopen("LCA.INP", "r", stdin);
+    freopen("LCA.OUT", "w", stdout);
+    input();
+    h[goc] = 1;
+    par[goc][0] = 0;
+    dfs(goc);
+    rmq();
+    output();
+    return 0;
+}

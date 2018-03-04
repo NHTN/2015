@@ -1,0 +1,67 @@
+#include <iostream>
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <queue>
+#include <cstring>
+#define maxn 20005
+using namespace std;
+
+int n,m;
+vector <pair <int , int > > a[maxn];
+int d1[maxn], d2[maxn];
+void nhap()
+{
+    for (int i = 1; i <= m; i++)
+    {
+        int x,y,w;
+        cin >> x >> y >> w;
+        a[x].push_back(make_pair(y,w));
+    }
+}
+void dijkstra()
+{
+    memset(d1, 119 , sizeof(d1));
+    memset(d2, 119 , sizeof(d2));
+
+    priority_queue <pair <int, int > > p;
+    p.push(make_pair(0,1));
+    d1[1] = 0;
+    while (!p.empty())
+    {
+        int l = -p.top().first;
+        int u = p.top().second;
+        p.pop();
+        if (l > d2[u]) continue;
+        for (int i = 0; i < a[u].size(); i++)
+        {
+            int v = a[u][i].first;
+            int w = a[u][i].second;
+            int newr = l + w;
+            if (newr >= d2[v] || newr == d1[v]) continue;
+            if (newr < d1[v])
+            {
+                d2[v] = d1[v];
+                d1[v] = newr;
+            } else d2[v] = newr;
+            p.push(make_pair(-newr, v));
+        }
+
+    }
+
+}
+void xuat()
+{
+    if (d2[n] > 200000000) cout << -1;
+      else cout << d2[n];
+}
+int main()
+{
+    freopen("SHORTEST.INP", "r", stdin);
+    freopen("SHORTEST.OUT", "w", stdout);
+    cin >> n >> m;
+    nhap();
+    dijkstra();
+    xuat();
+    return 0;
+}

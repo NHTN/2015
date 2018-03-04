@@ -1,0 +1,42 @@
+
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <deque>
+#define file "CROWDED"
+#define fi freopen(file".INP", "r", stdin);
+#define fo freopen(file".OUT", "w", stdout);
+#define maxn 50005
+#define f first
+#define s second
+using namespace std;
+int n, D, res;
+bool l[maxn], r[maxn];
+pair <int, int> a[maxn];
+deque <int> q;
+int main()
+{
+    fi; fo;
+    scanf("%d%d", &n, &D);
+    for (int i = 1; i <= n; i++) scanf("%d%d", &a[i].f, &a[i].s);
+    sort(a+1, a+n+1);
+    for (int i = 1; i <= n; i++)
+    {
+        while (!q.empty() && a[i].f - a[q.front()].f > D) q.pop_front();
+        while (!q.empty() && a[i].s > a[q.back()].s) q.pop_back();
+        if (!q.empty() && a[i].s * 2 <= a[q.front()].s) l[i] = 1; else l[i] = 0;
+        q.push_back(i);
+    }
+    q.clear();
+    for (int i = n; i >= 1; i--)
+    {
+        while (!q.empty() && a[q.front()].f - a[i].f > D) q.pop_front();
+        while (!q.empty() && a[i].s > a[q.back()].s) q.pop_back();
+        if (!q.empty() && a[i].s * 2 <= a[q.front()].s) r[i] = 1; else r[i] = 0;
+        q.push_back(i);
+    }
+    for (int i = 1; i <= n; i++)
+        if (l[i] && r[i]) res++;
+    printf("%d", res);
+    return 0;
+}

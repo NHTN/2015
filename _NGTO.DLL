@@ -1,0 +1,22 @@
+
+void sang()
+{
+    d[1] = 1;
+    for (int i = 2; i <= maxn; i++)
+        if (d[i] == 0)
+        {
+            d[i] = i;
+            for (int j = 2; j <= maxn / i; j++) d[i*j] = i;
+        }
+}
+void phantich(int x, int type)
+{
+    while (x > 1)
+    {
+        if (type == 1) d1[d[x]]++;
+            else d2[d[x]]++;
+        x /= d[x];
+    }
+}
+
+ 

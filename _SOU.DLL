@@ -1,0 +1,48 @@
+const
+  fi='';
+  fo='';
+  maxn=1000000;
+var
+  f,g:text;
+  d:array[0..maxn]of longint;
+  t,it,a,b:longint;
+  so,ton:array[0..maxn]of int64;
+procedure init;
+var i,j:longint;
+begin
+  for i:=1 to maxn do
+    begin
+      so[i]:=0;
+      ton[i]:=0;
+    end;
+  for i:=1 to maxn do
+    begin
+      j:=i;
+      while j<=maxn do
+        begin
+          so[j]:=so[j]+1;
+          ton[j]:=ton[j]+i;
+          j:=j+i;
+        end;
+    end;
+  for i:=1 to maxn do
+    begin
+      so[i]:=so[i]+so[i-1];
+      ton[i]:=ton[i]+ton[i-1];
+    end;
+end;
+begin
+init;
+assign(g,fo);
+rewrite(g);
+  assign(f,fi);
+  reset(f);
+    readln(f,t);
+    for it:=1 to t do
+      begin
+        readln(f,a,b);
+        writeln(g,so[b]-so[a-1],' ',ton[b]-ton[a-1]);
+      end;
+  close(f);
+close(g);
+end.

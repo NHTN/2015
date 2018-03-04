@@ -1,0 +1,76 @@
+#include <iostream>
+#include <fstream>
+#define maxn 100001
+using namespace std;
+int n, m, a[maxn], T[4*maxn+10], P[4*maxn+10], u, v;
+void built(int x, int l, int r)
+{
+    if (l == r)
+    {
+        T[x] = a[l];
+        return;xxxxxx
+    }
+    int mid = (l+ r)/ 2;
+    built(x* 2, l, mid);
+    built(x* 2+ 1, mid+ 1, r);
+    T[x] = max(T[x* 2], T[x* 2+ 1]);
+}
+void update(int x, int l, int r, int u, int v, int gt)
+{
+    if (l > v || r < u) return;
+    if (u <= l && r <= v)
+    {
+        T[x] += gt;
+        P[x] += gt;
+        return;
+    }
+    if (P[x])
+    {
+        T[x*2] += P[x];
+        P[x*2] += P[x];
+        T[x*2+1] += P[x];
+        P[x*2+1] += P[x];
+        P[x] = 0;
+    }
+    int mid = (l+ r)/ 2;
+    update(x* 2, l, mid, u, v, gt);
+    update(x* 2+ 1, mid+ 1, r, u, v, gt);
+    T[x] = max(T[x* 2], T[x* 2+ 1]);
+}
+int answer(int x, int l, int r, int u, int v)
+{
+    if (l > v || r < u) return 0;
+    if (u <= l && r <= v) return T[x];
+    if (P[x])
+    {
+        T[x*2] += P[x];
+        P[x*2] += P[x];
+        T[x*2+1] += P[x];
+        P[x*2+1] += P[x];
+        P[x] = 0;
+    }
+    int mid = (l+ r)/ 2;
+    int trai = answer(x* 2, l, mid, u, v);
+    int phai = answer(x* 2+ 1, mid+ 1, r, u, v);
+    return max(trai, phai);
+}
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin >> n >> m;
+    built(1, 1, n);
+    for (int i = 1; i <= m; i++)
+    {
+        int type;
+        cin >> type >> u >> v;
+        if (type == 0)
+        {
+            int giatri;
+            cin >> giatri;
+            update(1, 1, n, u, v, giatri);
+        } else cout << answer(1, 1, n, u, v) << endl;
+    }
+    return 0;
+}
+
+

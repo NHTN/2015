@@ -1,0 +1,57 @@
+#include <fstream>
+#include <iostream>
+#include <vector>
+#define file ""
+#define maxn 10005
+using namespace std;
+int n, m, number;
+vector <int> a[maxn];
+int low[maxn], num[maxn], par[maxn], nc[maxn];
+bool dau[maxn];
+void DFS(int u)
+{
+    low[u] = num[u] = ++ number;
+    for (int j = 0; j < a[u].size(); j++)
+    {
+        int v = a[u][j];
+        if (v == 0) continue;
+        for (int k = 0; k < a[v].size(); k++)
+            if (a[v][k] == u) a[v][k] = 0;
+        if (par[v] == 0)
+        {
+            par[v] = u;
+            nc[u]++;
+            DFS(v);
+            low[u] = min(low[u], low[v]);
+        } else
+        low[u] = min(low[u], num[v]);
+    }
+}
+int main()
+{
+    scanf("%d%d", &n, &m);
+    for (int i = 1; i <= m; i++)
+    {
+        int x, y;
+        scanf("%d%d", &x, &y);
+        a[x].push_back(y);
+        a[y].push_back(x);
+    }
+    for (int i = 1; i <= n; i++)
+        if (par[i] == 0) par[i] = -1, DFS(i);
+    int socau = 0, sokhop = 0;
+    for (int i = 1; i <= n; i++)
+    {
+        int u = par[i];
+        if (u != -1)
+        {
+            if (low[i] >= num[i]) socau++;
+            if (low[i] >= num[u])
+                dau[u] = dau[u] || (par[u] != -1) || (nc[u] > 1);
+        }
+    }
+    for (int i = 1; i <= n; i++)
+        if (dau[i]) sokhop++;
+    printf("%d %d", sokhop, socau);
+    return 0;
+}

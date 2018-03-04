@@ -1,0 +1,18 @@
+a*x + b*y = d
+
+m = a; xm = 1; ym = 0;
+n = b; xn = 0; yn = 1;
+while (n)
+{
+  q = m / n;
+  r = m - q * n;
+  xr = xm - q * xn;
+  yr = ym - q * yn;
+  m = n; xm = xn; ym = yn;
+  n = r; xn = xr; yn = yr;
+}
+return x = xm;
+	y = ym
+
+
+(xm = a ^ -1 theo module b)

@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+ 
+#define maxn 100001
+ 
+using namespace std;
+ 
+struct data
+{
+    int u, v, c;
+};
+data a[maxn];
+int n, m, res;
+int root[maxn];
+ 
+bool comp(data p, data q)
+{
+    return p.c < q.c;
+}
+ 
+int getroot(int x)
+{
+    if (root[x] == 0) return x;
+    return (root[x] = getroot(root[x]));
+}
+ 
+void kruskal()
+{
+    sort(a+1, a+m+1, comp);
+    for (int i = 1; i <= m; i++)
+    {
+        int r1 = getroot(a[i].u);
+        int r2 = getroot(a[i].v);
+        if (r1 != r2)
+        {
+            root[r2] = r1;
+            res += a[i].c;
+        }
+    }
+}
+ 
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    //freopen("SIMPLIFY.inp", "r", stdin);
+    //freopen("SIMPLIFY.out", "w", stdout);
+    cin >> n >> m;
+    for (int i = 1; i <= m; i++)
+        cin >> a[i].u >> a[i].v >> a[i].c;
+    kruskal();
+    cout << res;
+    return 0;
+}
